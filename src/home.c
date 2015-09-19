@@ -1,6 +1,6 @@
 #include <pebble.h>
 #include "home.h"
-#include <main.h>
+#include "main.h"
   
 static void main_window_select_click_handler(ClickRecognizerRef recognizer, void *context) {
   snprintf(points_text, sizeof("12345678901234567890"), "Select %llu", points);
