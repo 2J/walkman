@@ -5,6 +5,12 @@ static void shop_main_load(Window *window) {
   shop_title = text_layer_create(layer_get_bounds(window_get_root_layer(shop_main)));
   layer_add_child(window_get_root_layer(shop_main), text_layer_get_layer(shop_title));
   text_layer_set_text(shop_title, "SHOP");
+  shop_selection = 0;
+  for(int i=0;i<3;i++){
+    items[i].text_layer = text_layer_create(layer_get_bounds(window_get_root_layer(shop_main)));
+    text_layer_set_text(items[i].text_layer, items[i].name);
+    layer_add_child(window_get_root_layer(shop_main), text_layer_get_layer(items[i].text_layer));
+  }
 }
 
 static void shop_main_unload(Window *window) {
