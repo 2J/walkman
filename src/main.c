@@ -1,7 +1,7 @@
 #include <pebble.h>
-#include <main.h> //GLOBAL
-#include <home.h> //HOME / main_window
-#include <shop.h> //SHOP
+#include "main.h" //GLOBAL
+#include "home.h" //HOME / main_window
+#include "shop.h" //SHOP
 
 
 static void tick_handler(struct tm *tick_timer, TimeUnits units_changed) { //function is called every second
