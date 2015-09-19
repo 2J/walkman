@@ -9,10 +9,6 @@ struct shop_item(){
   unsigned long long price; //initial price
   char increment; //increment multiplier. will be multiplied by 1+increment per item bought
   TextLayer *text_layer;
-  
-  public unsigned long long get_price(){
-    return price; //TODO: increase price with multiplier
-  }
 }
 
 shop_item items[3];
