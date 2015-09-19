@@ -1,6 +1,7 @@
 #include <pebble.h>
-#include "home.h"
 #include "main.h"
+#include "home.h"
+#include "shop.h"
   
 static void main_window_select_click_handler(ClickRecognizerRef recognizer, void *context) {
 /* SELECT PRESSED, OPEN SHOP */

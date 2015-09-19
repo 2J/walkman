@@ -2,6 +2,13 @@
 TextLayer *shop_title;
 unsigned int shop_selection;
 
+static void shop_main_load(Window *window);
+static void shop_main_unload(Window *window);
+static void shop_main_select_click_handler(ClickRecognizerRef recognizer, void *context);
+static void shop_main_up_click_handler(ClickRecognizerRef recognizer, void *context);
+static void shop_main_down_click_handler(ClickRecognizerRef recognizer, void *context);
+static void click_config_shop_main(void *context);
+
 struct shop_item{
   int id; //id of item
   char* name;
