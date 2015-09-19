@@ -1,3 +1,5 @@
+#define shop_max 3
+
 Window *shop_main;
 
 TextLayer *shop_title;
