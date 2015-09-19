@@ -1,58 +1,8 @@
 #include <pebble.h>
+#include "main.h"
+#include "home.h"
+#include "shop.h"
 
-Window *my_window;
-TextLayer *text_layer;
-
-Window *main_window;
-Window *shop_main;
-
-unsigned long long points;
-char *points_text;
-
-TextLayer *shop_title;
-unsigned int shop_selection;
-
-struct shop_item{
-  int id; //id of item
-  char* name;
-  unsigned long long price; //initial price
-  char increment; //increment multiplier. will be multiplied by 1+increment per item bought
-  TextLayer *text_layer;
-};
-
-struct shop_item items[3]= {
-
-    {
-        0,
-        "Zombie",
-        100,
-        2,
-        NULL
-    },
-
-    {
-        1,
-        "Child",
-        200,
-        2,
-        NULL
-    },
-
-    {
-        2,
-        "Cheetah",
-        300,
-        2,
-        NULL
-    }
-};
-
-static void tick_handler(struct tm *tick_timer, TimeUnits units_changed) { //function is called every second
-  snprintf(points_text, sizeof("12345678901234567890"), "POINTS: %llu", ++points);
-  text_layer_set_text(text_layer, points_text);
-}
-
-//MAIN HOME
 static void main_window_select_click_handler(ClickRecognizerRef recognizer, void *context) {
 /* SELECT PRESSED, OPEN SHOP */
   //snprintf(points_text, sizeof("12345678901234567890"), "Select %llu", points);
@@ -62,6 +12,13 @@ static void main_window_select_click_handler(ClickRecognizerRef recognizer, void
   
   window_stack_push(shop_main, true);//TEMP: GO TO SHOP
 }
+  
+static void tick_handler(struct tm *tick_timer, TimeUnits units_changed) { //function is called every second
+  snprintf(points_text, sizeof("12345678901234567890"), "POINTS: %llu", ++points);
+  text_layer_set_text(text_layer, points_text);
+}
+
+//MAIN HOME
 
 static void main_window_up_click_handler(ClickRecognizerRef recognizer, void *context) {
   //text_layer_set_text(text_layer, "Up");
@@ -86,8 +43,10 @@ static void shop_main_load(Window *window) {
   layer_add_child(window_get_root_layer(shop_main), text_layer_get_layer(shop_title));
   text_layer_set_text(shop_title, "SHOP");
   shop_selection = 0;
+  GRect bounds = layer_get_bounds(window_get_root_layer(shop_main));
+  
   for(int i=0;i<3;i++){
-    items[i].text_layer = text_layer_create(layer_get_bounds(window_get_root_layer(shop_main)));
+    items[i].text_layer = text_layer_create((GRect) { .origin = { 0, 15+15*i }, .size = { bounds.size.w, 20 } });
     text_layer_set_text(items[i].text_layer, items[i].name);
     layer_add_child(window_get_root_layer(shop_main), text_layer_get_layer(items[i].text_layer));
   }
