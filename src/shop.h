@@ -30,7 +30,7 @@ struct shop_item items[3]= {
 
     {
         2,
-        "Cheetah"
+        "Cheetah",
         300,
         2,
         NULL
