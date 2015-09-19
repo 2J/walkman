@@ -1,0 +1,23 @@
+{
+    "appKeys": {},
+    "capabilities": [
+        ""
+    ],
+    "companyName": "jj@j2.io",
+    "longName": "Walkman",
+    "projectType": "native",
+    "resources": {
+        "media": []
+    },
+    "sdkVersion": "3",
+    "shortName": "Walkman",
+    "targetPlatforms": [
+        "aplite",
+        "basalt"
+    ],
+    "uuid": "92ccb737-8923-4f7f-af99-edcd57ebf2de",
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": false
+    }
+}
