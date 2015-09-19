@@ -4,9 +4,8 @@
 #include "shop.h"
   
 static void main_window_select_click_handler(ClickRecognizerRef recognizer, void *context) {
-/* SELECT PRESSED, OPEN SHOP */
-  //snprintf(points_text, sizeof("12345678901234567890"), "Select %llu", points);
-  //text_layer_set_text(text_layer, points_text);
+  snprintf(points_text, sizeof("12345678901234567890"), "Select %llu", points);
+  text_layer_set_text(text_layer, points_text);
   APP_LOG(APP_LOG_LEVEL_DEBUG, "SHOP");
   APP_LOG(APP_LOG_LEVEL_DEBUG, "%s", points_text);
   
@@ -14,13 +13,13 @@ static void main_window_select_click_handler(ClickRecognizerRef recognizer, void
 }
 
 static void main_window_up_click_handler(ClickRecognizerRef recognizer, void *context) {
-  //text_layer_set_text(text_layer, "Up");
+  text_layer_set_text(text_layer, "Up");
   APP_LOG(APP_LOG_LEVEL_DEBUG, "up");
   APP_LOG(APP_LOG_LEVEL_DEBUG, "%llu", points);
 }
 
 static void main_window_down_click_handler(ClickRecognizerRef recognizer, void *context) {
-  //text_layer_set_text(text_layer, "Down");
+  text_layer_set_text(text_layer, "Down");
   APP_LOG(APP_LOG_LEVEL_DEBUG, "down");
 }
 
