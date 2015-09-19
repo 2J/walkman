@@ -1,4 +1,5 @@
 #include <pebble.h>
+#include <main.h> //GLOBAL
 #include "shop.h"
 
 static void shop_main_load(Window *window) {
