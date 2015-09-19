@@ -1,18 +1,3 @@
-#define shop_max 3
-
-Window *shop_main;
-
-TextLayer *shop_title;
-unsigned int shop_selection;
-
-struct shop_item{
-  int id; //id of item
-  char* name;
-  unsigned long long price; //initial price
-  char increment; //increment multiplier. will be multiplied by 1+increment per item bought
-  TextLayer *text_layer;
-};
-
 struct shop_item items[3]= {
 
     {
@@ -40,3 +25,58 @@ struct shop_item items[3]= {
     }
 };
 
+static void shop_select(int shop_selection);
+
+static void shop_main_load(Window *window) {
+  shop_title = text_layer_create(layer_get_bounds(window_get_root_layer(shop_main)));
+  layer_add_child(window_get_root_layer(shop_main), text_layer_get_layer(shop_title));
+  text_layer_set_text(shop_title, "SHOP");
+  shop_selection = 0;
+  GRect bounds = layer_get_bounds(window_get_root_layer(shop_main));
+  
+  for(int i=0;i<shop_max;i++){
+    items[i].text_layer = text_layer_create((GRect) { .origin = { 0, 15+15*i }, .size = { bounds.size.w, 20 } });
+    text_layer_set_text(items[i].text_layer, items[i].name);
+    layer_add_child(window_get_root_layer(shop_main), text_layer_get_layer(items[i].text_layer));
+  }
+  
+  shop_select(shop_selection);
+}
+
+static void shop_main_unload(Window *window) {
+  text_layer_destroy(shop_title);
+}
+
+
+static void shop_main_select_click_handler(ClickRecognizerRef recognizer, void *context) {
+  //snprintf(points_text, sizeof("12345678901234567890"), "Select %llu", points);
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "BUY");
+}
+
+static void shop_main_up_click_handler(ClickRecognizerRef recognizer, void *context) {
+  if(shop_selection>0) shop_select(--shop_selection);
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "up SELECT %d", shop_selection);
+}
+
+static void shop_main_down_click_handler(ClickRecognizerRef recognizer, void *context) {
+  if(shop_selection<shop_max-1) shop_select(++shop_selection);
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "down SELECT %d", shop_selection);
+}
+
+static void click_config_shop_main(void *context) {
+  window_single_click_subscribe(BUTTON_ID_SELECT, shop_main_select_click_handler);
+  window_single_click_subscribe(BUTTON_ID_UP, shop_main_up_click_handler);
+  window_single_click_subscribe(BUTTON_ID_DOWN, shop_main_down_click_handler);
+}
+
+static void shop_select(int shop_selection){
+  for(int i=0;i<shop_max;i++){
+    if(shop_selection == i){
+      text_layer_set_background_color(items[i].text_layer, GColorBlack);
+      text_layer_set_text_color(items[i].text_layer, GColorWhite);
+    }else{
+      text_layer_set_background_color(items[i].text_layer, GColorWhite);
+      text_layer_set_text_color(items[i].text_layer, GColorBlack);
+    }
+  }
+}
