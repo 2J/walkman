@@ -1,5 +1,5 @@
+//items initialization
 struct shop_item items[3]= {
-
     {
         0,
         "Zombie",
@@ -7,7 +7,6 @@ struct shop_item items[3]= {
         2,
         NULL
     },
-
     {
         1,
         "Child",
@@ -15,7 +14,6 @@ struct shop_item items[3]= {
         2,
         NULL
     },
-
     {
         2,
         "Cheetah",
@@ -25,8 +23,10 @@ struct shop_item items[3]= {
     }
 };
 
+//select function declatation
 static void shop_select(int shop_selection);
 
+//shop window initialization
 static void shop_main_load(Window *window) {
   shop_title = text_layer_create(layer_get_bounds(window_get_root_layer(shop_main)));
   layer_add_child(window_get_root_layer(shop_main), text_layer_get_layer(shop_title));
@@ -35,7 +35,7 @@ static void shop_main_load(Window *window) {
   GRect bounds = layer_get_bounds(window_get_root_layer(shop_main));
   
   for(int i=0;i<shop_max;i++){
-    items[i].text_layer = text_layer_create((GRect) { .origin = { 0, 15+15*i }, .size = { bounds.size.w, 20 } });
+    items[i].text_layer = text_layer_create((GRect) { .origin = { 0, 20+20*i }, .size = { bounds.size.w, 20 } });
     text_layer_set_text(items[i].text_layer, items[i].name);
     layer_add_child(window_get_root_layer(shop_main), text_layer_get_layer(items[i].text_layer));
   }
@@ -43,21 +43,24 @@ static void shop_main_load(Window *window) {
   shop_select(shop_selection);
 }
 
+//shop window destroy
 static void shop_main_unload(Window *window) {
   text_layer_destroy(shop_title);
 }
 
-
+//middle button pressed
 static void shop_main_select_click_handler(ClickRecognizerRef recognizer, void *context) {
   //snprintf(points_text, sizeof("12345678901234567890"), "Select %llu", points);
   APP_LOG(APP_LOG_LEVEL_DEBUG, "BUY");
 }
 
+//up button pressed
 static void shop_main_up_click_handler(ClickRecognizerRef recognizer, void *context) {
   if(shop_selection>0) shop_select(--shop_selection);
   APP_LOG(APP_LOG_LEVEL_DEBUG, "up SELECT %d", shop_selection);
 }
 
+//down button pressed
 static void shop_main_down_click_handler(ClickRecognizerRef recognizer, void *context) {
   if(shop_selection<shop_max-1) shop_select(++shop_selection);
   APP_LOG(APP_LOG_LEVEL_DEBUG, "down SELECT %d", shop_selection);
@@ -69,6 +72,7 @@ static void click_config_shop_main(void *context) {
   window_single_click_subscribe(BUTTON_ID_DOWN, shop_main_down_click_handler);
 }
 
+//shop selection
 static void shop_select(int shop_selection){
   for(int i=0;i<shop_max;i++){
     if(shop_selection == i){

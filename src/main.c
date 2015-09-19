@@ -9,12 +9,6 @@ static void tick_handler(struct tm *tick_timer, TimeUnits units_changed) { //fun
   text_layer_set_text(text_layer, points_text);
 }
 
-//MAIN HOME
-
-
-//SHOP
-
-
 void handle_init(void) {
   points_text = malloc(sizeof("12345678901234567890"));
   
