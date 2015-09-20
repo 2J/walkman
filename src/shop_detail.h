@@ -11,27 +11,33 @@ static void shop_detail_load(Window *window) {
   current_window = 2;
   GRect bounds = layer_get_bounds(window_get_root_layer(shop_detail));
   
+  //ITEM NAME
   unit_name = text_layer_create((GRect) { .origin = { 0, 0 }, .size = { bounds.size.w, 20 } });
   text_layer_set_text(unit_name, item.name);
   text_layer_set_text_alignment(unit_name, GTextAlignmentCenter);
   layer_add_child(window_get_root_layer(shop_detail), text_layer_get_layer(unit_name));
   
+  //NUMBER OF UNITS OWNED
   owned = text_layer_create((GRect) { .origin = { 0, 40 }, .size = { bounds.size.w, 20 } });
   snprintf(temp1, sizeof("12345678901234567890"), "Owned: %d", item.num);
   text_layer_set_text(owned, temp1);
   text_layer_set_text_alignment(owned, GTextAlignmentLeft);
   layer_add_child(window_get_root_layer(shop_detail), text_layer_get_layer(owned));
   
+  //COST OF UNIT
   price = text_layer_create((GRect) { .origin = { 72, 128 }, .size = { 71, 20 } });
   snprintf(temp2, sizeof("12345678901234567890"), "Cost: %llu", item.price);
   text_layer_set_text(price, temp2);
   text_layer_set_text_alignment(price, GTextAlignmentRight);
   layer_add_child(window_get_root_layer(shop_detail), text_layer_get_layer(price));
   
+  //BUY BUTTON
   button = text_layer_create((GRect) { .origin = { 72, 148 }, .size = { 71, 20 } });
   text_layer_set_text(button, "BUY");
   text_layer_set_text_alignment(button, GTextAlignmentCenter);
   layer_add_child(window_get_root_layer(shop_detail), text_layer_get_layer(button));
+  text_layer_set_background_color(button, GColorBlack);
+  text_layer_set_text_color(button, GColorWhite);
   
   APP_LOG(APP_LOG_LEVEL_DEBUG, "SHOP DETAIL DEBUG %s", points_text);
   
