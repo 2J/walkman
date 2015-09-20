@@ -5,7 +5,7 @@ static void main_window_select_click_handler(ClickRecognizerRef recognizer, void
   APP_LOG(APP_LOG_LEVEL_DEBUG, "SHOP");
   APP_LOG(APP_LOG_LEVEL_DEBUG, "%s", points_text);
   
-  window_stack_push(shop_main, true);//TEMP: GO TO SHOP
+  window_stack_push(shop_main, true);//GO TO SHOP
 }
 
 static void main_window_up_click_handler(ClickRecognizerRef recognizer, void *context) {
