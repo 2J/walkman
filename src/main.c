@@ -6,8 +6,8 @@
 #include "shop_detail.h"
 
 static void tick_handler(struct tm *tick_timer, TimeUnits units_changed) { //function is called every second
-  snprintf(points_text, sizeof("12345678901234567890"), "POINTS: %llu", ++points);
-  points+=10;
+  snprintf(points_text, sizeof("12345678901234567890"), "POINTS: %llu", points);
+  //points+=10;
   if(current_window == 0){//IN HOME SCREEN
     APP_LOG(APP_LOG_LEVEL_DEBUG, "CURRENTLY AT HOME");
     text_layer_set_text(text_layer, points_text);
@@ -18,7 +18,9 @@ static void tick_handler(struct tm *tick_timer, TimeUnits units_changed) { //fun
     APP_LOG(APP_LOG_LEVEL_DEBUG, "CURRENTLY AT SHOP DETAILS");
     text_layer_set_text(shop_points, points_text);
   }
-}
+}  
+  
+int oldX = 1000, state = 1; // Variables for pedometer
   
 static void data_handler(AccelData *data, uint32_t num_samples) {
   // Long lived buffer
@@ -39,16 +41,16 @@ static void data_handler(AccelData *data, uint32_t num_samples) {
   APP_LOG(APP_LOG_LEVEL_DEBUG, "SUM: %d, oldX: %d", sum, oldX);
   
   if (sum < oldX && oldX > 900 && state == 1){
-    steps++;
+    points++;
     state = 0;
     
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "STEPS: %d", steps);
-    
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "TOOK A STEEEEEEEEEEEEEEEEEP: %llu", points);
+    /*
     // Compose string of all data
-    snprintf(s_buffer, sizeof(s_buffer), "Steps: %d", steps);
+    snprintf(s_buffer, sizeof(s_buffer), "Points: %llu", points);
   
     //Show the data
-    text_layer_set_text(text_layer, s_buffer);
+    text_layer_set_text(text_layer, s_buffer);*/
   }
   
   oldX = sum;
@@ -80,9 +82,9 @@ void handle_init(void) {
   });
   window_set_click_config_provider(shop_detail, click_config_shop_detail);
   
-  tick_timer_service_subscribe(SECOND_UNIT, tick_handler);
   window_stack_push(main_window, true);
-  // tick_timer_service_subscribe(SECOND_UNIT, tick_handler);
+  
+  tick_timer_service_subscribe(SECOND_UNIT, tick_handler);
   points=0;
 
   // Subscribe to the accelerometer data service

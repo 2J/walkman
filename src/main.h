@@ -4,7 +4,7 @@
 unsigned long long points;
 char *points_text;
 char current_window = 0; //0: MAIN, 1: SHOP, 2: SHOP DETAIL
-int oldX = 1000, steps = 0, state = 1; // Variables for pedometer
+
 
 //home
 TextLayer *text_layer;
