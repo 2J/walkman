@@ -25,14 +25,14 @@ static void shop_detail_load(Window *window) {
   layer_add_child(window_get_root_layer(shop_detail), text_layer_get_layer(owned));
   
   //COST OF UNIT
-  price = text_layer_create((GRect) { .origin = { 72, 128 }, .size = { 71, 20 } });
+  price = text_layer_create((GRect) { .origin = { 72, 128 }, .size = { 72, 20 } });
   snprintf(temp2, sizeof("12345678901234567890"), "Cost: %llu", item.price);
   text_layer_set_text(price, temp2);
   text_layer_set_text_alignment(price, GTextAlignmentRight);
   layer_add_child(window_get_root_layer(shop_detail), text_layer_get_layer(price));
   
   //BUY BUTTON
-  button = text_layer_create((GRect) { .origin = { 72, 148 }, .size = { 71, 20 } });
+  button = text_layer_create((GRect) { .origin = { 72, 148 }, .size = { 72, 20 } });
   text_layer_set_text(button, "BUY");
   text_layer_set_text_alignment(button, GTextAlignmentCenter);
   layer_add_child(window_get_root_layer(shop_detail), text_layer_get_layer(button));
