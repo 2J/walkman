@@ -3,27 +3,46 @@
 #include "main.h"
 #include "home.h"
 #include "shop.h"
-#include "walk.h"
-  
+
 static void tick_handler(struct tm *tick_timer, TimeUnits units_changed) { //function is called every second
   snprintf(points_text, sizeof("12345678901234567890"), "POINTS: %llu", ++points);
   text_layer_set_text(text_layer, points_text);
 }
 
+int oldX = 1000, steps = 0, state = 1;
+  
 static void data_handler(AccelData *data, uint32_t num_samples) {
   // Long lived buffer
   static char s_buffer[128];
-
-  // Compose string of all data
-  snprintf(s_buffer, sizeof(s_buffer), 
-    "N X,Y,Z\n0 %d,%d,%d\n1 %d,%d,%d\n2 %d,%d,%d", 
-    data[0].x, data[0].y, data[0].z, 
-    data[1].x, data[1].y, data[1].z, 
-    data[2].x, data[2].y, data[2].z
-  );
-
-  //Show the data
-  text_layer_set_text(text_layer, s_buffer);
+  
+  int sum = 0;
+  
+  for(int i = 0; i < 20; i++){
+    sum += data[i].x;
+  }
+  
+  sum /= 20;
+  
+  if (sum > oldX && state == 0){
+    state = 1;
+  }
+  
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "SUM: %d, oldX: %d", sum, oldX);
+  
+  if (sum < oldX && oldX > 900 && state == 1){
+    steps++;
+    state = 0;
+    
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "STEPS: %d", steps);
+    
+    // Compose string of all data
+    snprintf(s_buffer, sizeof(s_buffer), "Steps: %d", steps);
+  
+    //Show the data
+    text_layer_set_text(text_layer, s_buffer);
+  }
+  
+  oldX = sum;
 }
 
 //MAIN HOME
@@ -33,7 +52,7 @@ static void data_handler(AccelData *data, uint32_t num_samples) {
 
 
 void handle_init(void) {
-  // points_text = malloc(sizeof("12345678901234567890"));
+  points_text = malloc(sizeof("12345678901234567890"));
   
   //main window
   main_window = window_create();
@@ -49,18 +68,16 @@ void handle_init(void) {
   });
   window_set_click_config_provider(shop_main, click_config_shop_main);
   
-  /*
-  tick_timer_service_subscribe(SECOND_UNIT, tick_handler);
   window_stack_push(main_window, true);
+  // tick_timer_service_subscribe(SECOND_UNIT, tick_handler);
   points=0;
-  */
 
   // Subscribe to the accelerometer data service
-  int num_samples = 3;
+  int num_samples = 20;
   accel_data_service_subscribe(num_samples, data_handler);
 
   // Choose update rate
-  accel_service_set_sampling_rate(ACCEL_SAMPLING_10HZ);
+  accel_service_set_sampling_rate(ACCEL_SAMPLING_100HZ);
 }
 
 void handle_deinit(void) {
