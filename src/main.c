@@ -3,9 +3,10 @@
 #include "main.h"
 #include "home.h"
 #include "shop.h"
-  
+
 static void tick_handler(struct tm *tick_timer, TimeUnits units_changed) { //function is called every second
   snprintf(points_text, sizeof("12345678901234567890"), "POINTS: %llu", ++points);
+  points+=10;
   if(current_window == 0){//IN HOME SCREEN
     APP_LOG(APP_LOG_LEVEL_DEBUG, "CURRENTLY AT HOME");
     text_layer_set_text(text_layer, points_text);
@@ -31,7 +32,7 @@ void handle_init(void) {
     .unload = shop_main_unload,
   });
   window_set_click_config_provider(shop_main, click_config_shop_main);
-  
+  //TODO: initialize points, item prices, number of units based on persistent data
   
   tick_timer_service_subscribe(SECOND_UNIT, tick_handler);
   window_stack_push(main_window, true);

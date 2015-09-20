@@ -1,30 +1,49 @@
 //items initialization
+//TODO: MAKE FUNCTION THAT APPENDS PRICE TO END
+//TODO: MAKE FUNCTION THAT CHANGES PRICES INTO SCIENTIFIC NOTATION
 struct shop_item items[3]= {
     {
         0,
-        "Zombie",
+        "Zombie         100",
         100,
         2,
+        0,
         NULL
     },
     {
         1,
-        "Child",
+        "Child          200",
         200,
         2,
+        0,
         NULL
     },
     {
         2,
-        "Cheetah",
+        "Cheetah        300",
         300,
         2,
+        0,
         NULL
     }
 };
 
 //select function declatation
 static void shop_select(int shop_selection);
+
+static void shop_buy(int shop_selection){
+  struct shop_item item = items[shop_selection];
+  if(points >= item.price){ //can buy
+    points -= item.price;
+    item.num++;
+    //TODO: increase item price
+    
+    //TODO: make next two lines more elegant(refreshes page instantly
+    snprintf(points_text, sizeof("12345678901234567890"), "POINTS: %llu", ++points);
+    text_layer_set_text(shop_points, points_text);
+  }else{ //cant buy, show error message
+  }
+}
 
 //shop window initialization
 static void shop_main_load(Window *window) {
@@ -62,7 +81,8 @@ static void shop_main_unload(Window *window) {
 //middle button pressed
 static void shop_main_select_click_handler(ClickRecognizerRef recognizer, void *context) {
   //snprintf(points_text, sizeof("12345678901234567890"), "Select %llu", points);
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "BUY");
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "BUY %s", items[shop_selection].name);
+  shop_buy(shop_selection);
 }
 
 //up button pressed

@@ -20,5 +20,6 @@ struct shop_item{
   char* name;
   unsigned long long price; //initial price
   char increment; //increment multiplier. will be multiplied by 1+increment per item bought
+  unsigned int num; //number of units
   TextLayer *text_layer;
 };
