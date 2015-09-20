@@ -1,3 +1,3 @@
 #include <pebble.h>
-#include "walk.h"
+#include <walk.h>
 

@@ -10,6 +10,22 @@ static void tick_handler(struct tm *tick_timer, TimeUnits units_changed) { //fun
   text_layer_set_text(text_layer, points_text);
 }
 
+static void data_handler(AccelData *data, uint32_t num_samples) {
+  // Long lived buffer
+  static char s_buffer[128];
+
+  // Compose string of all data
+  snprintf(s_buffer, sizeof(s_buffer), 
+    "N X,Y,Z\n0 %d,%d,%d\n1 %d,%d,%d\n2 %d,%d,%d", 
+    data[0].x, data[0].y, data[0].z, 
+    data[1].x, data[1].y, data[1].z, 
+    data[2].x, data[2].y, data[2].z
+  );
+
+  //Show the data
+  text_layer_set_text(text_layer, s_buffer);
+}
+
 //MAIN HOME
 
 
@@ -17,7 +33,7 @@ static void tick_handler(struct tm *tick_timer, TimeUnits units_changed) { //fun
 
 
 void handle_init(void) {
-  points_text = malloc(sizeof("12345678901234567890"));
+  // points_text = malloc(sizeof("12345678901234567890"));
   
   //main window
   main_window = window_create();
@@ -38,6 +54,13 @@ void handle_init(void) {
   window_stack_push(main_window, true);
   points=0;
   */
+
+  // Subscribe to the accelerometer data service
+  int num_samples = 3;
+  accel_data_service_subscribe(num_samples, data_handler);
+
+  // Choose update rate
+  accel_service_set_sampling_rate(ACCEL_SAMPLING_10HZ);
 }
 
 void handle_deinit(void) {
