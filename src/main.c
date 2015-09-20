@@ -6,7 +6,13 @@
   
 static void tick_handler(struct tm *tick_timer, TimeUnits units_changed) { //function is called every second
   snprintf(points_text, sizeof("12345678901234567890"), "POINTS: %llu", ++points);
-  text_layer_set_text(text_layer, points_text);
+  if(current_window == 0){//IN HOME SCREEN
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "CURRENTLY AT HOME");
+    text_layer_set_text(text_layer, points_text);
+  }else if(current_window == 1){//IN SHOP
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "CURRENTLY AT SHOP");
+    text_layer_set_text(shop_points, points_text);
+  }
 }
 
 void handle_init(void) {

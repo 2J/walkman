@@ -28,14 +28,19 @@ static void shop_select(int shop_selection);
 
 //shop window initialization
 static void shop_main_load(Window *window) {
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "INITIALIZATING SHOP");
+  current_window = 1;
+  GRect bounds = layer_get_bounds(window_get_root_layer(shop_main));
   shop_title = text_layer_create(layer_get_bounds(window_get_root_layer(shop_main)));
+  shop_points = text_layer_create((GRect) { .origin = { 0, shop_font_height }, .size = { bounds.size.w, shop_font_height } });
+  text_layer_set_text(shop_points, points_text);
   layer_add_child(window_get_root_layer(shop_main), text_layer_get_layer(shop_title));
+  layer_add_child(window_get_root_layer(shop_main), text_layer_get_layer(shop_points));
   text_layer_set_text(shop_title, "SHOP");
   shop_selection = 0;
-  GRect bounds = layer_get_bounds(window_get_root_layer(shop_main));
-  
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "SHOP DEBUG %s", points_text);
   for(int i=0;i<shop_max;i++){
-    items[i].text_layer = text_layer_create((GRect) { .origin = { 0, 20+20*i }, .size = { bounds.size.w, 20 } });
+    items[i].text_layer = text_layer_create((GRect) { .origin = { 0, shop_font_height*2+shop_font_height*i }, .size = { bounds.size.w, shop_font_height } });
     text_layer_set_text(items[i].text_layer, items[i].name);
     layer_add_child(window_get_root_layer(shop_main), text_layer_get_layer(items[i].text_layer));
   }
@@ -45,7 +50,13 @@ static void shop_main_load(Window *window) {
 
 //shop window destroy
 static void shop_main_unload(Window *window) {
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "GOING OUT OF SHOP");
+  current_window = 0;
+  for(int i=0;i<shop_max;i++){
+    text_layer_destroy(items[i].text_layer);
+  }
   text_layer_destroy(shop_title);
+  text_layer_destroy(shop_points);
 }
 
 //middle button pressed
