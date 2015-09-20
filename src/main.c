@@ -3,6 +3,7 @@
 #include "main.h"
 #include "home.h"
 #include "shop.h"
+#include "shop_detail.h"
 
 static void tick_handler(struct tm *tick_timer, TimeUnits units_changed) { //function is called every second
   snprintf(points_text, sizeof("12345678901234567890"), "POINTS: %llu", ++points);
@@ -12,6 +13,9 @@ static void tick_handler(struct tm *tick_timer, TimeUnits units_changed) { //fun
     text_layer_set_text(text_layer, points_text);
   }else if(current_window == 1){//IN SHOP
     APP_LOG(APP_LOG_LEVEL_DEBUG, "CURRENTLY AT SHOP");
+    text_layer_set_text(shop_points, points_text);
+  }else if(current_window == 2){//IN SHOP DETAIL
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "CURRENTLY AT SHOP DETAILS");
     text_layer_set_text(shop_points, points_text);
   }
 }
@@ -33,6 +37,14 @@ void handle_init(void) {
   });
   window_set_click_config_provider(shop_main, click_config_shop_main);
   //TODO: initialize points, item prices, number of units based on persistent data
+  
+  //buy window
+  shop_detail = window_create();
+  window_set_window_handlers(shop_detail, (WindowHandlers) {
+    .load = shop_detail_load,
+    .unload = shop_detail_unload,
+  });
+  window_set_click_config_provider(shop_detail, click_config_shop_detail);
   
   tick_timer_service_subscribe(SECOND_UNIT, tick_handler);
   window_stack_push(main_window, true);

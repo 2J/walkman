@@ -4,7 +4,7 @@
 struct shop_item items[3]= {
     {
         0,
-        "Zombie         100",
+        "Zombie",
         100,
         2,
         0,
@@ -12,7 +12,7 @@ struct shop_item items[3]= {
     },
     {
         1,
-        "Child          200",
+        "Child",
         200,
         2,
         0,
@@ -20,7 +20,7 @@ struct shop_item items[3]= {
     },
     {
         2,
-        "Cheetah        300",
+        "Cheetah",
         300,
         2,
         0,
@@ -31,36 +31,38 @@ struct shop_item items[3]= {
 //select function declatation
 static void shop_select(int shop_selection);
 
-static void shop_buy(int shop_selection){
-  struct shop_item item = items[shop_selection];
-  if(points >= item.price){ //can buy
-    points -= item.price;
-    item.num++;
-    //TODO: increase item price
-    
-    //TODO: make next two lines more elegant(refreshes page instantly
-    snprintf(points_text, sizeof("12345678901234567890"), "POINTS: %llu", ++points);
-    text_layer_set_text(shop_points, points_text);
-  }else{ //cant buy, show error message
-  }
-}
-
 //shop window initialization
 static void shop_main_load(Window *window) {
   APP_LOG(APP_LOG_LEVEL_DEBUG, "INITIALIZATING SHOP");
   current_window = 1;
   GRect bounds = layer_get_bounds(window_get_root_layer(shop_main));
+  
+  //create texts
   shop_title = text_layer_create(layer_get_bounds(window_get_root_layer(shop_main)));
   shop_points = text_layer_create((GRect) { .origin = { 0, shop_font_height }, .size = { bounds.size.w, shop_font_height } });
+
+  
+  //text alignment
+  text_layer_set_text_alignment(shop_title, GTextAlignmentCenter);
+  text_layer_set_text_alignment(shop_points, GTextAlignmentRight);
+
+  //text set string
+  text_layer_set_text(shop_title, "SHOP");
   text_layer_set_text(shop_points, points_text);
+  
+  //add text to layer
   layer_add_child(window_get_root_layer(shop_main), text_layer_get_layer(shop_title));
   layer_add_child(window_get_root_layer(shop_main), text_layer_get_layer(shop_points));
-  text_layer_set_text(shop_title, "SHOP");
+
   shop_selection = 0;
+  
   APP_LOG(APP_LOG_LEVEL_DEBUG, "SHOP DEBUG %s", points_text);
+  
+  //initialize shop items
   for(int i=0;i<shop_max;i++){
     items[i].text_layer = text_layer_create((GRect) { .origin = { 0, shop_font_height*2+shop_font_height*i }, .size = { bounds.size.w, shop_font_height } });
     text_layer_set_text(items[i].text_layer, items[i].name);
+    text_layer_set_text_alignment(items[i].text_layer, GTextAlignmentCenter);
     layer_add_child(window_get_root_layer(shop_main), text_layer_get_layer(items[i].text_layer));
   }
   
@@ -82,7 +84,7 @@ static void shop_main_unload(Window *window) {
 static void shop_main_select_click_handler(ClickRecognizerRef recognizer, void *context) {
   //snprintf(points_text, sizeof("12345678901234567890"), "Select %llu", points);
   APP_LOG(APP_LOG_LEVEL_DEBUG, "BUY %s", items[shop_selection].name);
-  shop_buy(shop_selection);
+  window_stack_push(shop_detail, true);//GO TO SHOP DETAILS
 }
 
 //up button pressed
