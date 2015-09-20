@@ -3,6 +3,7 @@
 #include "main.h"
 #include "home.h"
 #include "shop.h"
+#include "walk.h"
   
 static void tick_handler(struct tm *tick_timer, TimeUnits units_changed) { //function is called every second
   snprintf(points_text, sizeof("12345678901234567890"), "POINTS: %llu", ++points);
@@ -32,10 +33,11 @@ void handle_init(void) {
   });
   window_set_click_config_provider(shop_main, click_config_shop_main);
   
-  
+  /*
   tick_timer_service_subscribe(SECOND_UNIT, tick_handler);
   window_stack_push(main_window, true);
   points=0;
+  */
 }
 
 void handle_deinit(void) {
